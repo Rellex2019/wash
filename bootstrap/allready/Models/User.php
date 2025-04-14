@@ -18,7 +18,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'full_name',
         'email',
+        'phone',
+        'address',
         'login',
         'password',
     ];
@@ -45,5 +48,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    public function cleaningRequests()
+    {
+        return $this->hasMany(CleaningRequest::class);
+    }
+    public function isAdmin()
+    {
+        return $this->login === 'adminka';
+    }
 }

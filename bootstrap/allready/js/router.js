@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from './store';
-import Registration from '@/js/pages/Registration.vue'
+import Login from './pages/Login.vue';
+import Registration from './pages/Registration.vue';
+import Requests from './pages/Requests.vue';
 const isAuthenticated = (to, from, next) => {
     const authenticated = store.getters['authStore/isAuthenticated'];
     if (authenticated) {
@@ -23,8 +25,16 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/', 
+            path: '/login', 
+            component: Login
+        },
+        {
+            path: '/registration', 
             component: Registration
+        },
+        {
+            path: '/cleaning_requests', 
+            component: Requests
         },
     ]
 });

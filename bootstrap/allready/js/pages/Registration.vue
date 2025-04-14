@@ -28,8 +28,8 @@
                 <form @submit.prevent="handleSubmit" class="form">
                     <div class="form-group">
                         <label>ФИО *</label>
-                        <input type="text" v-model="form.name" @input="checkNick" placeholder="ФИО" required>
-                        <span class="hint" v-if="!usernameError">Ошибка ФИО</span>
+                        <input type="text" v-model="form.full_name"  placeholder="ФИО" required>
+
                         <!-- <div class="error" v-if="usernameError"><img class="alert" src="@/svg/alert.svg" /> {{ usernameError }}</div> -->
                     </div>
                     <div class="form-group">
@@ -40,14 +40,14 @@
                     </div>
                     <div class="form-group">
                         <label>Номер телефона *</label>
-                        <input type="number" v-model="form.phone" placeholder="+7 (xxx) - xxx -xx -xx" required>
+                        <input type="tel" v-model="form.phone" placeholder="+7 (xxx) - xxx -xx -xx" required>
 
                         <!-- ВЫВОД ОШИБКИ -->
                     </div>
                     <div class="form-group">
                         <label>Логин *</label>
-                        <input type="email" v-model="form.login" placeholder="Логин" required>
-
+                        <input type="text" v-model="form.login" placeholder="Логин" @input="checkNick" required>
+                        <span class="hint" v-if="!usernameError" v-html="usernameError"></span>
                         <!-- ВЫВОД ОШИБКИ -->
                     </div>
 
@@ -84,7 +84,7 @@ export default {
                 login: '',
                 password: '',
                 email: '',
-                name: '',
+                full_name: '',
                 phone: '',
             },
             usernameError: ''
@@ -96,16 +96,17 @@ export default {
         {
             axios.post('/register', this.form)
                 .then(response => {
-                    this.$router.push('/dashboard')
+                    this.$store.commit('authStore/setUser', response.data);
+                    this.$router.push('/cleaning_requests');
                 })
         }
         },
         checkNick() {
             const regex = /^[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*$/;
 
-            if (!this.form.name) {
+            if (!this.form.login) {
                 this.usernameError = 'Поле не может быть пустым';
-            } else if (!regex.test(this.form.name)) {
+            } else if (!regex.test(this.form.login)) {
                 this.usernameError = 'Допустимы только буквы, цифры и одиночные дефисы';
             } else {
                 this.usernameError = '';
